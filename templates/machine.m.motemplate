@@ -3,6 +3,25 @@
 
 #import "_<$managedObjectClassName$>.h"
 
+<$if hasJSONImport$>
+<$foreach Relationship noninheritedRelationships do$>
+<$if Relationship.isToMany$>
+<$if Relationship.destinationEntity.hasJSONImport$>
+#import "_<$Relationship.destinationEntity.managedObjectClassName$>.h"
+<$else$>
+<$if Relationship.destinationEntity.hasJSONExport$>
+#import "_<$Relationship.destinationEntity.managedObjectClassName$>.h"
+<$endif$>
+<$endif$>
+<$endif$>
+<$endforeach do$>
+
+static inline BOOL IsNotNull(id object)
+{
+    return !((object == nil) || ([object isEqual:[NSNull null]]));
+}
+<$endif$>
+
 <$if noninheritedAttributes.@count > 0$>
 const struct <$managedObjectClassName$>Attributes <$managedObjectClassName$>Attributes = {<$foreach Attribute noninheritedAttributes do$>
 	.<$Attribute.name$> = @"<$Attribute.name$>",<$endforeach do$>
@@ -229,6 +248,127 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
 <$endforeach do$>
 #endif
 <$endif$>
+
+<$if hasJSONExport$>
++(NSString*)_dateToString:(NSDate*)date withFormat:(NSString*)format
+{
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    [formatter setLocale:[NSLocale currentLocale]];
+    [formatter setDateFormat:format];
+    
+    NSString *dateString = [formatter stringFromDate:date];
+    return dateString;
+}
+
+-(NSDictionary*)jsonExport {
+	NSMutableDictionary* result = [NSMutableDictionary dictionary];
+
+	<$foreach Attribute noninheritedAttributes do$>
+	<$if Attribute.hasDefinedAttributeType$>
+	<$if Attribute.includeInJSONExport$>
+	if (self.<$Attribute.name$>) {
+		result[@"<$Attribute.mappedJSONKeyName$>"] = <$if Attribute.isDate$>[_<$managedObjectClassName$> _dateToString:self.<$Attribute.name$> withFormat:@"<$Attribute.dateFormat$>"]<$else$>self.<$Attribute.name$><$endif$>;
+	}
+	<$endif$>
+	<$endif$>
+	<$endforeach do$>
+
+	<$foreach Relationship noninheritedRelationships do$>
+	<$if Relationship.isToMany$>
+	<$if Relationship.destinationEntity.hasJSONExport$>
+    if (self.<$Relationship.name$>) {
+        NSMutableArray* array = [NSMutableArray array];
+        for (_<$Relationship.destinationEntity.managedObjectClassName$>* obj in self.<$Relationship.name$>) {
+            [array addObject:[obj jsonExport]];
+        }
+        result[@"<$Relationship.mappedJSONKeyName$>"] = array;
+    }
+   	<$endif$>
+	<$endif$>
+	<$endforeach do$>
+
+	return result;
+}
+<$endif$>
+
+<$if hasJSONImport$>
++(NSDate*)_stringToDate:(NSString*)dateString withFormat:(NSString*)format
+{	
+    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+    [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
+    [formatter setLocale:[NSLocale currentLocale]];
+    [formatter setDateFormat:format];
+    return [formatter dateFromString:dateString];
+}
+
++(id)createFromJSON:(NSDictionary*)data inContext:(NSManagedObjectContext*)ctx {
+	<$if primaryAttributeToRelateBy$>
+	_<$managedObjectClassName$>* obj = nil;
+    NSFetchRequest *request = [[NSFetchRequest alloc] init];
+    [request setEntity:[NSEntityDescription entityForName:@"<$name$>" inManagedObjectContext:ctx]];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"%K = %@", <$managedObjectClassName$>Attributes.<$primaryAttributeToRelateBy$>, data[@"<$primaryAttributeToRelateByMappedToJSON$>"]]];
+    NSArray *results = [ctx executeFetchRequest:request error:nil];
+    if (results && results.count > 0) {
+        obj = [results firstObject];
+    } else {
+        obj = [_<$managedObjectClassName$> insertInManagedObjectContext:ctx];
+    }
+	<$else$>
+	_<$managedObjectClassName$>* obj = [_<$managedObjectClassName$> insertInManagedObjectContext:ctx];
+	<$endif$>
+	[obj updateFromJSON:data inContext:ctx];
+	return obj;
+}
+
++(NSArray*)createFromJSONArray:(NSArray*)array inContext:(NSManagedObjectContext*)ctx {
+	NSMutableArray* result = [NSMutableArray array];
+	for (NSDictionary* data in array) {
+		[result addObject:[_<$managedObjectClassName$> createFromJSON:data inContext:ctx]];
+	}
+	return result;
+}
+
+-(id)updateFromJSON:(NSDictionary*)data inContext:(NSManagedObjectContext*)ctx {
+	<$foreach Attribute noninheritedAttributes do$>
+	<$if Attribute.hasDefinedAttributeType$>
+	<$if Attribute.includeInJSONImport$>
+
+	<$if Attribute.optional$>
+		if (IsNotNull(data[@"<$Attribute.mappedJSONKeyName$>"])) {
+	<$endif$>
+
+			<$if Attribute.isDate$>
+			self.<$Attribute.name$> = [_<$managedObjectClassName$> _stringToDate:data[@"<$Attribute.mappedJSONKeyName$>"] withFormat:@"<$Attribute.dateFormat$>"];
+			<$else$>
+			self.<$Attribute.name$> = data[@"<$Attribute.mappedJSONKeyName$>"];
+			<$endif$>
+
+	<$if Attribute.optional$>
+		}
+	<$endif$>
+
+	<$endif$>
+	<$endif$>
+	<$endforeach do$>
+
+
+	<$foreach Relationship noninheritedRelationships do$>
+	<$if Relationship.isToMany$>
+	<$if Relationship.destinationEntity.hasJSONImport$>
+    if (IsNotNull(data[@"<$Relationship.mappedJSONKeyName$>"])) {
+        for (NSDictionary* obj in data[@"<$Relationship.mappedJSONKeyName$>"]) {
+        	[self add<$Relationship.name.initialCapitalString$>Object:[_<$Relationship.destinationEntity.managedObjectClassName$> createFromJSON:obj inContext:ctx]];
+        }
+    }
+	<$endif$>
+	<$endif$>
+	<$endforeach do$>
+
+	return self;
+}
+<$endif$>
+
 @end
 
 <$foreach Relationship noninheritedRelationships do$><$if Relationship.isToMany$><$if Relationship.jr_isOrdered$>

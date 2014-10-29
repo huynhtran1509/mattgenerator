@@ -14,6 +14,14 @@ BOOL       gSwift;
 
 static NSString *const kAttributeValueScalarTypeKey = @"attributeValueScalarType";
 static NSString *const kAdditionalHeaderFileNameKey = @"additionalHeaderFileName";
+static NSString *const kJSONOptionsKey = @"jsonOptions";
+
+@interface NSAttributeDescription (JSONImportExport)
+-(BOOL)includeInJSONExport;
+-(BOOL)includeInJSONImport;
+-(NSString*)mappedJSONKeyName;
+-(BOOL)isDate;
+@end
 
 @interface NSEntityDescription (fetchedPropertiesAdditions)
 - (NSDictionary*)fetchedPropertiesByName;
@@ -358,6 +366,39 @@ static NSString *const kAdditionalHeaderFileNameKey = @"additionalHeaderFileName
 }
 @end
 
+@interface NSEntityDescription (JSONImportExport)
+- (BOOL)hasJSONExport;
+- (BOOL)hasJSONImport;
+@end
+
+@implementation NSEntityDescription (JSONImportExport)
+
+- (BOOL)hasJSONImport {
+    NSString* jsonOptions = self.userInfo[kJSONOptionsKey];
+    return jsonOptions && [[jsonOptions lowercaseString] rangeOfString:@"import"].location != NSNotFound;
+}
+
+- (BOOL)hasJSONExport {
+    NSString* jsonOptions = self.userInfo[kJSONOptionsKey];
+    return jsonOptions && [[jsonOptions lowercaseString] rangeOfString:@"export"].location != NSNotFound;
+}
+
+-(NSString*)primaryAttributeToRelateBy {
+    return self.userInfo[@"relatedByAttribute"];
+}
+
+-(NSString*)primaryAttributeToRelateByMappedToJSON {
+    NSString* attr = self.userInfo[@"relatedByAttribute"];
+    if (attr == nil) {
+        return nil;
+    }
+    NSAttributeDescription* attrDesc = self.attributesByName[attr];
+    return [attrDesc mappedJSONKeyName];
+}
+
+@end
+
+
 @implementation NSAttributeDescription (typing)
 - (BOOL)isUnsigned
 {
@@ -547,6 +588,35 @@ static NSString *const kAdditionalHeaderFileNameKey = @"additionalHeaderFileName
 
 @end
 
+@implementation NSAttributeDescription (JSONImportExport)
+-(BOOL)includeInJSONExport {
+    return self.userInfo[@"notInJSONExport"] == nil;
+
+}
+-(BOOL)includeInJSONImport {
+    return self.userInfo[@"notInJSONImport"] == nil;
+}
+-(NSString*)dateFormat {
+    if (self.userInfo[@"dateFormat"]) {
+        return self.userInfo[@"dateFormat"];
+    } else {
+        return @"yyyy-MM-dd'T'HH:mm:ssz";
+    }
+}
+
+-(BOOL)isDate {
+    return [self.objectAttributeType isEqualToString:@"NSDate*"];
+}
+
+-(NSString*)mappedJSONKeyName {
+    if (self.userInfo[@"mappedKeyName"]) {
+        return self.userInfo[@"mappedKeyName"] ;
+    } else {
+        return self.name;
+    }
+}
+@end
+
 @implementation NSRelationshipDescription (collectionClassName)
 
 - (NSString*)mutableCollectionClassName {
@@ -566,6 +636,17 @@ static NSString *const kAdditionalHeaderFileNameKey = @"additionalHeaderFileName
 }
 
 @end
+
+@implementation NSRelationshipDescription (JSONImportExport)
+-(NSString*)mappedJSONKeyName {
+    if (self.userInfo[@"mappedKeyName"]) {
+        return self.userInfo[@"mappedKeyName"] ;
+    } else {
+        return self.name;
+    }
+}
+@end
+
 
 @implementation NSString (camelCaseString)
 - (NSString*)camelCaseString {

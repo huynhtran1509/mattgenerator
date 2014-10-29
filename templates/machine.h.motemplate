@@ -159,3 +159,20 @@ extern const struct <$managedObjectClassName$>UserInfo {<$foreach UserInfo userI
 <$endif$>
 <$endforeach do$>
 @end
+
+<$if hasJSONImport$>
+@interface _<$managedObjectClassName$> (JSONImport)
++(id)createFromJSON:(NSDictionary*)data inContext:(NSManagedObjectContext*)ctx;
++(NSArray*)createFromJSONArray:(NSArray*)array inContext:(NSManagedObjectContext*)ctx;
+-(id)updateFromJSON:(NSDictionary*)data inContext:(NSManagedObjectContext*)ctx;
+@end
+<$endif$>
+
+
+<$if hasJSONExport$>
+@interface _<$managedObjectClassName$> (JSONExport)
+-(NSDictionary*)jsonExport;
+@end
+<$endif$>
+
+

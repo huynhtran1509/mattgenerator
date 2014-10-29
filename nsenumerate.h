@@ -25,6 +25,6 @@ for( ITERATOR_TYPE															\
 #define	nsenumerat( CONTAINER, ITERATOR_SYMBOL )					\
 for( id																\
 	 enumerator = nsenumerate_getEnumerator(id, CONTAINER),			\
-	 ITERATOR_SYMBOL = [((NSEnumerator*) enumerator) nextObject];	\
+	 ITERATOR_SYMBOL = [((NSEn  umerator*) enumerator) nextObject];	\
 	 ITERATOR_SYMBOL != nil;										\
 	 ITERATOR_SYMBOL = [((NSEnumerator*) enumerator) nextObject] )
