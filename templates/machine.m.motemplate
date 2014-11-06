@@ -14,7 +14,7 @@
 <$endif$>
 <$endif$>
 <$endif$>
-<$endforeach do$>
+<$endforeach do$>	
 
 static inline BOOL IsNotNull(id object)
 {
@@ -23,7 +23,7 @@ static inline BOOL IsNotNull(id object)
 <$endif$>
 
 <$if noninheritedAttributes.@count > 0$>
-const struct <$managedObjectClassName$>Attributes <$managedObjectClassName$>Attributes = {<$foreach Attribute noninheritedAttributes do$>
+const struct <$managedObjectClassName$>Attributes <$managedObjectClassName$>Attributes = {<$foreach Attribute inheritedAttributes do$>
 	.<$Attribute.name$> = @"<$Attribute.name$>",<$endforeach do$>
 };
 <$endif$>
@@ -261,14 +261,21 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
     return dateString;
 }
 
--(NSDictionary*)jsonExport {
-	NSMutableDictionary* result = [NSMutableDictionary dictionary];
+-(void)_jsonExport:(NSMutableDictionary*)result
+{
+	<$if baseHasClassJSONExport$>
+	[super _jsonExport:result];
+	<$endif$>
 
 	<$foreach Attribute noninheritedAttributes do$>
 	<$if Attribute.hasDefinedAttributeType$>
 	<$if Attribute.includeInJSONExport$>
 	if (self.<$Attribute.name$>) {
+		<$if Attribute.customJSONExport$>
+		result[@"<$Attribute.mappedJSONKeyName$>"] = <$Attribute.customJSONExport$>;
+		<$else$>
 		result[@"<$Attribute.mappedJSONKeyName$>"] = <$if Attribute.isDate$>[_<$managedObjectClassName$> _dateToString:self.<$Attribute.name$> withFormat:@"<$Attribute.dateFormat$>"]<$else$>self.<$Attribute.name$><$endif$>;
+		<$endif$>
 	}
 	<$endif$>
 	<$endif$>
@@ -287,10 +294,18 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
    	<$endif$>
 	<$endif$>
 	<$endforeach do$>
+}
 
+<$if ! baseHasClassJSONExport$>
+-(NSDictionary*)jsonExport {
+	NSMutableDictionary* result = [NSMutableDictionary dictionary];
+	[self _jsonExport:result];
 	return result;
 }
 <$endif$>
+<$endif$>
+
+
 
 <$if hasJSONImport$>
 +(NSDate*)_stringToDate:(NSString*)dateString withFormat:(NSString*)format
@@ -329,7 +344,17 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
 	return result;
 }
 
--(id)updateFromJSON:(NSDictionary*)data inContext:(NSManagedObjectContext*)ctx {
+-(void)updateFromJSON:(NSDictionary*)data inContext:(NSManagedObjectContext*)ctx {
+	[self _updateFromJSON:data inContext:ctx];
+	[self didImportJSON];
+}
+
+-(void)_updateFromJSON:(NSDictionary*)data inContext:(NSManagedObjectContext*)ctx {
+
+	<$if baseHasClassJSONExport$>
+	[super _updateFromJSON:data inContext:ctx];
+	<$endif$>
+
 	<$foreach Attribute noninheritedAttributes do$>
 	<$if Attribute.hasDefinedAttributeType$>
 	<$if Attribute.includeInJSONImport$>
@@ -338,11 +363,15 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
 		if (IsNotNull(data[@"<$Attribute.mappedJSONKeyName$>"])) {
 	<$endif$>
 
+		<$if Attribute.customJSONImport$>
+			self.<$Attribute.name$> = <$Attribute.customJSONImport$>;
+		<$else$>
 			<$if Attribute.isDate$>
 			self.<$Attribute.name$> = [_<$managedObjectClassName$> _stringToDate:data[@"<$Attribute.mappedJSONKeyName$>"] withFormat:@"<$Attribute.dateFormat$>"];
 			<$else$>
 			self.<$Attribute.name$> = data[@"<$Attribute.mappedJSONKeyName$>"];
 			<$endif$>
+		<$endif$>
 
 	<$if Attribute.optional$>
 		}
@@ -364,8 +393,13 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
 	<$endif$>
 	<$endif$>
 	<$endforeach do$>
+}
 
-	return self;
+-(void)didImportJSON
+{
+	<$if baseHasClassJSONExport$>
+	[super didImportJSON];
+	<$endif$>
 }
 <$endif$>
 

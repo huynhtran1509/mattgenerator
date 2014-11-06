@@ -192,6 +192,11 @@ static NSString *const kJSONOptionsKey = @"jsonOptions";
     }
 }
 
+- (NSArray*)inheritedAttributes {
+    NSArray *sortDescriptors = [NSArray arrayWithObject:[NSSortDescriptor sortDescriptorWithKey:@"name" ascending:YES]];
+    return [[[self attributesByName] allValues] sortedArrayUsingDescriptors:sortDescriptors];
+}
+
 - (NSString*)additionalHeaderFileName {
     return [[self userInfo] objectForKey:kAdditionalHeaderFileNameKey];
 }
@@ -369,6 +374,8 @@ static NSString *const kJSONOptionsKey = @"jsonOptions";
 @interface NSEntityDescription (JSONImportExport)
 - (BOOL)hasJSONExport;
 - (BOOL)hasJSONImport;
+- (BOOL)baseHasClassJSONExport;
+- (BOOL)baseHasClassJSONImport;
 @end
 
 @implementation NSEntityDescription (JSONImportExport)
@@ -394,6 +401,14 @@ static NSString *const kJSONOptionsKey = @"jsonOptions";
     }
     NSAttributeDescription* attrDesc = self.attributesByName[attr];
     return [attrDesc mappedJSONKeyName];
+}
+
+- (BOOL)baseHasClassJSONExport {
+    return self.superentity != nil && [self.superentity hasJSONExport];
+}
+
+- (BOOL)baseHasClassJSONImport {
+    return self.superentity != nil && [self.superentity hasJSONImport];
 }
 
 @end
@@ -615,6 +630,15 @@ static NSString *const kJSONOptionsKey = @"jsonOptions";
         return self.name;
     }
 }
+
+-(NSString*)customJSONImport {
+    return self.userInfo[@"customJSONImportFunction"];
+}
+
+-(NSString*)customJSONExport {
+    return self.userInfo[@"ccustomJSONExportFunction"];
+}
+
 @end
 
 @implementation NSRelationshipDescription (collectionClassName)
