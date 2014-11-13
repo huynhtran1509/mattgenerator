@@ -345,8 +345,11 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
 }
 
 -(void)updateFromJSON:(NSDictionary*)data inContext:(NSManagedObjectContext*)ctx {
-	[self _updateFromJSON:data inContext:ctx];
-	[self didImportJSON];
+	data = [self willImportJSON:data];
+	if (data) {
+		[self _updateFromJSON:data inContext:ctx];
+		[self didImportJSON];
+	}
 }
 
 -(void)_updateFromJSON:(NSDictionary*)data inContext:(NSManagedObjectContext*)ctx {
@@ -393,6 +396,11 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
 	<$endif$>
 	<$endif$>
 	<$endforeach do$>
+}
+
+-(NSDictionary*)willImportJSON:(NSDictionary*)data
+{
+	return data;
 }
 
 -(void)didImportJSON
