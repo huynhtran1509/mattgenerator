@@ -372,7 +372,16 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
 			<$if Attribute.isDate$>
 			self.<$Attribute.name$> = [_<$managedObjectClassName$> _stringToDate:data[@"<$Attribute.mappedJSONKeyName$>"] withFormat:@"<$Attribute.dateFormat$>"];
 			<$else$>
+			<$if Attribute.hasNumericAttributeType$>
+			id value = data[@"<$Attribute.mappedJSONKeyName$>"];
+			if (![value isKindOfClass:[NSNumber class]]) {
+				self.<$Attribute.name$> = [NSNumber numberWithDouble:[value doubleValue]];
+			} else {
+				self.<$Attribute.name$> = value;
+			}
+			<$else$>
 			self.<$Attribute.name$> = data[@"<$Attribute.mappedJSONKeyName$>"];
+			<$endif$>
 			<$endif$>
 		<$endif$>
 

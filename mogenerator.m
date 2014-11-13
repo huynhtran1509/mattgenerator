@@ -440,6 +440,11 @@ static NSString *const kJSONOptionsKey = @"jsonOptions";
             return NO;
     }
 }
+
+-(BOOL)hasNumericAttributeType {
+    return [self hasScalarAttributeType] && [self attributeType] != NSBooleanAttributeType;
+}
+
 - (NSString*)scalarAttributeType {
     
     BOOL isUnsigned = [self isUnsigned];
