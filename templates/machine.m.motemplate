@@ -370,7 +370,14 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
 			self.<$Attribute.name$> = <$Attribute.customJSONImport$>;
 		<$else$>
 			<$if Attribute.isDate$>
-			self.<$Attribute.name$> = [_<$managedObjectClassName$> _stringToDate:data[@"<$Attribute.mappedJSONKeyName$>"] withFormat:@"<$Attribute.dateFormat$>"];
+            if ([data[@"<$Attribute.mappedJSONKeyName$>"] isKindOfClass:[NSDate class]])
+            {
+               self.<$Attribute.name$> = data[@"<$Attribute.mappedJSONKeyName$>"];
+            }
+            else
+            {
+               self.<$Attribute.name$> = [_<$managedObjectClassName$> _stringToDate:data[@"<$Attribute.mappedJSONKeyName$>"] withFormat:@"<$Attribute.dateFormat$>"];
+            }
 			<$else$>
 			<$if Attribute.hasNumericAttributeType$>
 			id value = data[@"<$Attribute.mappedJSONKeyName$>"];
