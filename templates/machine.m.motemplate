@@ -322,7 +322,7 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
 	_<$managedObjectClassName$>* obj = nil;
     NSFetchRequest *request = [[NSFetchRequest alloc] init];
     [request setEntity:[NSEntityDescription entityForName:@"<$name$>" inManagedObjectContext:ctx]];
-    [request setPredicate:[NSPredicate predicateWithFormat:@"%K = %@", <$managedObjectClassName$>Attributes.<$primaryAttributeToRelateBy$>, data[@"<$primaryAttributeToRelateByMappedToJSON$>"]]];
+    [request setPredicate:[NSPredicate predicateWithFormat:@"%K = %@", <$managedObjectClassName$>Attributes.<$primaryAttributeToRelateBy$>, [data valueForKeyPath:@"<$primaryAttributeToRelateByMappedToJSON$>"]]];
     NSArray *results = [ctx executeFetchRequest:request error:nil];
     if (results && results.count > 0) {
         obj = [results firstObject];
@@ -363,31 +363,32 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
 	<$if Attribute.includeInJSONImport$>
 
 	<$if Attribute.optional$>
-		if (IsNotNull(data[@"<$Attribute.mappedJSONKeyName$>"])) {
+		if (IsNotNull([data valueForKeyPath:@"<$Attribute.mappedJSONKeyName$>"])) {
 	<$endif$>
 
 		<$if Attribute.customJSONImport$>
 			self.<$Attribute.name$> = <$Attribute.customJSONImport$>;
 		<$else$>
 			<$if Attribute.isDate$>
-            if ([data[@"<$Attribute.mappedJSONKeyName$>"] isKindOfClass:[NSDate class]])
+			id value = [data valueForKeyPath:@"<$Attribute.mappedJSONKeyName$>"];
+            if ([value isKindOfClass:[NSDate class]])
             {
-               self.<$Attribute.name$> = data[@"<$Attribute.mappedJSONKeyName$>"];
+               self.<$Attribute.name$> = value;
             }
             else
             {
-               self.<$Attribute.name$> = [_<$managedObjectClassName$> _stringToDate:data[@"<$Attribute.mappedJSONKeyName$>"] withFormat:@"<$Attribute.dateFormat$>"];
+               self.<$Attribute.name$> = [_<$managedObjectClassName$> _stringToDate:value withFormat:@"<$Attribute.dateFormat$>"];
             }
 			<$else$>
 			<$if Attribute.hasNumericAttributeType$>
-			id value = data[@"<$Attribute.mappedJSONKeyName$>"];
+			id value = [data valueForKeyPath:@"<$Attribute.mappedJSONKeyName$>"];
 			if (![value isKindOfClass:[NSNumber class]]) {
 				self.<$Attribute.name$> = [NSNumber numberWithDouble:[value doubleValue]];
 			} else {
 				self.<$Attribute.name$> = value;
 			}
 			<$else$>
-			self.<$Attribute.name$> = data[@"<$Attribute.mappedJSONKeyName$>"];
+			self.<$Attribute.name$> = [data valueForKeyPath:@"<$Attribute.mappedJSONKeyName$>"];
 			<$endif$>
 			<$endif$>
 		<$endif$>
@@ -404,8 +405,9 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
 	<$foreach Relationship noninheritedRelationships do$>
 	<$if Relationship.isToMany$>
 	<$if Relationship.destinationEntity.hasJSONImport$>
-    if (IsNotNull(data[@"<$Relationship.mappedJSONKeyName$>"])) {
-        for (NSDictionary* obj in data[@"<$Relationship.mappedJSONKeyName$>"]) {
+	NSArray* objs = [data valueForKeyPath:@"<$Relationship.mappedJSONKeyName$>"];
+    if (IsNotNull(objs)) {
+        for (NSDictionary* obj in objs) {
         	[self add<$Relationship.name.initialCapitalString$>Object:[_<$Relationship.destinationEntity.managedObjectClassName$> createFromJSON:obj inContext:ctx]];
         }
     }
