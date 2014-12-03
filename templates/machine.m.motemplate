@@ -3,6 +3,10 @@
 
 #import "_<$managedObjectClassName$>.h"
 
+// These need to be implemented in your project parse data from/to json string
+extern NSDate* (^dateFromString)(NSString* dateString, NSString* format);// if you get a link error, you need to implement this block
+extern NSString* (^stringFromDate)(NSDate* date, NSString* format); // if you get a link error, you need to implement this block
+
 <$if hasJSONImport$>
 <$foreach Relationship noninheritedRelationships do$>
 <$if Relationship.isToMany$>
@@ -250,17 +254,6 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
 <$endif$>
 
 <$if hasJSONExport$>
-+(NSString*)_dateToString:(NSDate*)date withFormat:(NSString*)format
-{
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    [formatter setLocale:[NSLocale currentLocale]];
-    [formatter setDateFormat:format];
-    
-    NSString *dateString = [formatter stringFromDate:date];
-    return dateString;
-}
-
 -(void)_jsonExport:(NSMutableDictionary*)result
 {
 	<$if baseHasClassJSONExport$>
@@ -274,7 +267,7 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
 		<$if Attribute.customJSONExport$>
 		result[@"<$Attribute.mappedJSONKeyName$>"] = <$Attribute.customJSONExport$>;
 		<$else$>
-		result[@"<$Attribute.mappedJSONKeyName$>"] = <$if Attribute.isDate$>[_<$managedObjectClassName$> _dateToString:self.<$Attribute.name$> withFormat:@"<$Attribute.dateFormat$>"]<$else$>self.<$Attribute.name$><$endif$>;
+		result[@"<$Attribute.mappedJSONKeyName$>"] = <$if Attribute.isDate$>stringFromDate(self.<$Attribute.name$>, @"<$Attribute.dateFormat$>")<$else$>self.<$Attribute.name$><$endif$>;
 		<$endif$>
 	}
 	<$endif$>
@@ -308,15 +301,6 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
 
 
 <$if hasJSONImport$>
-+(NSDate*)_stringToDate:(NSString*)dateString withFormat:(NSString*)format
-{	
-    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
-    [formatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-    [formatter setLocale:[NSLocale currentLocale]];
-    [formatter setDateFormat:format];
-    return [formatter dateFromString:dateString];
-}
-
 +(id)createFromJSON:(NSDictionary*)data inContext:(NSManagedObjectContext*)ctx {
 	<$if primaryAttributeToRelateBy$>
 	_<$managedObjectClassName$>* obj = nil;
@@ -377,7 +361,7 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
             }
             else
             {
-               self.<$Attribute.name$> = [_<$managedObjectClassName$> _stringToDate:value withFormat:@"<$Attribute.dateFormat$>"];
+               self.<$Attribute.name$> = dateFromString(value, @"<$Attribute.dateFormat$>");
             }
 			<$else$>
 			<$if Attribute.hasNumericAttributeType$>
