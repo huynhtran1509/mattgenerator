@@ -311,7 +311,7 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
     if (results && results.count > 0) {
         obj = [results firstObject];
     } else {
-        obj = [_<$managedObjectClassName$> insertInManagedObjectContext:ctx];
+        obj = [self.class insertInManagedObjectContext:ctx];
     }
 	<$else$>
 	_<$managedObjectClassName$>* obj = [_<$managedObjectClassName$> insertInManagedObjectContext:ctx];
@@ -323,7 +323,7 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
 +(NSArray*)createFromJSONArray:(NSArray*)array inContext:(NSManagedObjectContext*)ctx {
 	NSMutableArray* result = [NSMutableArray array];
 	for (NSDictionary* data in array) {
-		[result addObject:[_<$managedObjectClassName$> createFromJSON:data inContext:ctx]];
+		[result addObject:[self.class createFromJSON:data inContext:ctx]];
 	}
 	return result;
 }
@@ -389,12 +389,14 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
 	<$foreach Relationship noninheritedRelationships do$>
 	<$if Relationship.isToMany$>
 	<$if Relationship.destinationEntity.hasJSONImport$>
-	NSArray* objs = [data valueForKeyPath:@"<$Relationship.mappedJSONKeyName$>"];
-    if (IsNotNull(objs)) {
-        for (NSDictionary* obj in objs) {
-        	[self add<$Relationship.name.initialCapitalString$>Object:[_<$Relationship.destinationEntity.managedObjectClassName$> createFromJSON:obj inContext:ctx]];
-        }
-    }
+	{
+		NSArray* objs = [data valueForKeyPath:@"<$Relationship.mappedJSONKeyName$>"];
+	    if (IsNotNull(objs)) {
+	        for (NSDictionary* obj in objs) {
+	        	[self add<$Relationship.name.initialCapitalString$>Object:[_<$Relationship.destinationEntity.managedObjectClassName$> createFromJSON:obj inContext:ctx]];
+	        }
+	    }
+	}
 	<$endif$>
 	<$endif$>
 	<$endforeach do$>
