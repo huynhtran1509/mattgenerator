@@ -168,6 +168,7 @@
 		79D2C0570ACFBCB500F3F141 /* FoundationAdditions.h */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.h; path = FoundationAdditions.h; sourceTree = "<group>"; };
 		79D2C0580ACFBCB500F3F141 /* FoundationAdditions.m */ = {isa = PBXFileReference; fileEncoding = 30; lastKnownFileType = sourcecode.c.objc; path = FoundationAdditions.m; sourceTree = "<group>"; };
 		8DD76FA10486AA7600D96B5E /* mogenerator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = mogenerator; sourceTree = BUILT_PRODUCTS_DIR; };
+		B001F03F1A8D848C0047CECA /* templates */ = {isa = PBXFileReference; lastKnownFileType = folder; path = templates; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -187,6 +188,7 @@
 		08FB7794FE84155DC02AAC07 /* mogenerator */ = {
 			isa = PBXGroup;
 			children = (
+				B001F03F1A8D848C0047CECA /* templates */,
 				08FB7795FE84155DC02AAC07 /* Source */,
 				79D2BF510ACFB51000F3F141 /* MiscMerge */,
 				457C26C6139A1EF900BF00DD /* ponso */,
@@ -371,6 +373,8 @@
 /* Begin PBXProject section */
 		08FB7793FE84155DC02AAC07 /* Project object */ = {
 			isa = PBXProject;
+			attributes = {
+			};
 			buildConfigurationList = 1DEB927808733DD40010E9CD /* Build configuration list for PBXProject "mogenerator" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;

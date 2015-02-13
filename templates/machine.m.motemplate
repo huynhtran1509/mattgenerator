@@ -275,8 +275,7 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
 	<$endforeach do$>
 
 	<$foreach Relationship noninheritedRelationships do$>
-	<$if Relationship.isToMany$>
-	<$if Relationship.destinationEntity.hasJSONExport$>
+	<$if Relationship.destinationEntity.hasJSONExport$><$if Relationship.isToMany$>
     if (self.<$Relationship.name$>) {
         NSMutableArray* array = [NSMutableArray array];
         for (_<$Relationship.destinationEntity.managedObjectClassName$>* obj in self.<$Relationship.name$>) {
@@ -284,8 +283,11 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
         }
         result[@"<$Relationship.mappedJSONKeyName$>"] = array;
     }
-   	<$endif$>
-	<$endif$>
+   	<$else$><$if Relationship.hasJSONExport$>
+   	if (self.<$Relationship.name$>) {
+   		result[@"<$Relationship.mappedJSONKeyName$>"] = [self.<$Relationship.name$> jsonExport];
+   	}
+   	<$endif$><$endif$><$endif$>
 	<$endforeach do$>
 }
 
@@ -387,8 +389,7 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
 
 
 	<$foreach Relationship noninheritedRelationships do$>
-	<$if Relationship.isToMany$>
-	<$if Relationship.destinationEntity.hasJSONImport$>
+	<$if Relationship.destinationEntity.hasJSONImport$><$if Relationship.isToMany$>
 	{
 		NSArray* objs = [data valueForKeyPath:@"<$Relationship.mappedJSONKeyName$>"];
 	    if (IsNotNull(objs)) {
@@ -397,8 +398,15 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
 	        }
 	    }
 	}
-	<$endif$>
-	<$endif$>
+	<$else$><$if Relationship.hasJSONImport$>
+	{
+		id value = [data valueForKeyPath:@"<$Relationship.mappedJSONKeyName$>"];
+	    if (IsNotNull(value)) {
+	    	self.<$Relationship.name$> = [_<$Relationship.destinationEntity.managedObjectClassName$> createFromJSON:value inContext:ctx];
+	    }
+	}
+	<$endif$><$endif$><$endif$>
+
 	<$endforeach do$>
 }
 
