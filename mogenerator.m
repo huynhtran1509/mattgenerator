@@ -664,6 +664,16 @@ static NSString *const kJSONOptionsKey = @"jsonOptions";
     }
 }
 
+-(BOOL)hasJSONImport {
+    NSString* jsonOptions = self.userInfo[kJSONOptionsKey];
+    return jsonOptions && [[jsonOptions lowercaseString] rangeOfString:@"import"].location != NSNotFound;
+}
+
+-(BOOL)hasJSONExport {
+    NSString* jsonOptions = self.userInfo[kJSONOptionsKey];
+    return jsonOptions && [[jsonOptions lowercaseString] rangeOfString:@"export"].location != NSNotFound;
+}
+
 @end
 
 @implementation NSRelationshipDescription (JSONImportExport)

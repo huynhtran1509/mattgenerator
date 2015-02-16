@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>B433073C-A38D-4CDC-ACFE-B37A76AB859F</string>
+	<key>IDESourceControlProjectName</key>
+	<string>mattgenerator</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>3F43BB7C94C4B9F88FAE3003C2C501F338024DA5</key>
+		<string>github.com:willowtreeapps/mogenerator.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>mattgenerator.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>3F43BB7C94C4B9F88FAE3003C2C501F338024DA5</key>
+		<string>..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>github.com:willowtreeapps/mogenerator.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>3F43BB7C94C4B9F88FAE3003C2C501F338024DA5</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>3F43BB7C94C4B9F88FAE3003C2C501F338024DA5</string>
+			<key>IDESourceControlWCCName</key>
+			<string>mogenerator</string>
+		</dict>
+	</array>
+</dict>
+</plist>
