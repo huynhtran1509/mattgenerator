@@ -9,16 +9,10 @@ extern NSString* (^stringFromDate)(NSDate* date, NSString* format); // if you ge
 
 <$if hasJSONImport$>
 <$foreach Relationship noninheritedRelationships do$>
-<$if Relationship.isToMany$>
-<$if Relationship.destinationEntity.hasJSONImport$>
-#import "_<$Relationship.destinationEntity.managedObjectClassName$>.h"
-<$else$>
-<$if Relationship.destinationEntity.hasJSONExport$>
-#import "_<$Relationship.destinationEntity.managedObjectClassName$>.h"
+<$if Relationship.destinationEntity.hasJSONExportOrImport$>
+#import "<$Relationship.destinationEntity.managedObjectClassName$>.h"
 <$endif$>
-<$endif$>
-<$endif$>
-<$endforeach do$>	
+<$endforeach do$>
 
 static inline BOOL IsNotNull(id object)
 {
@@ -275,14 +269,14 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
 	<$endforeach do$>
 
 	<$foreach Relationship noninheritedRelationships do$>
-	<$if Relationship.destinationEntity.hasJSONExport$><$if Relationship.isToMany$>
+	<$if Relationship.destinationEntity.hasJSONExport$><$if Relationship.isToMany$><$if ! Relationship.notInJSONExport$>
     if (self.<$Relationship.name$>) {
         NSMutableArray* array = [NSMutableArray array];
-        for (_<$Relationship.destinationEntity.managedObjectClassName$>* obj in self.<$Relationship.name$>) {
+        for (<$Relationship.destinationEntity.managedObjectClassName$>* obj in self.<$Relationship.name$>) {
             [array addObject:[obj jsonExport]];
         }
         result[@"<$Relationship.mappedJSONKeyName$>"] = array;
-    }
+    }<$endif$>
    	<$else$><$if Relationship.hasJSONExport$>
    	if (self.<$Relationship.name$>) {
    		result[@"<$Relationship.mappedJSONKeyName$>"] = [self.<$Relationship.name$> jsonExport];
@@ -316,7 +310,7 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
         obj = [self.class insertInManagedObjectContext:ctx];
     }
 	<$else$>
-	_<$managedObjectClassName$>* obj = [_<$managedObjectClassName$> insertInManagedObjectContext:ctx];
+	_<$managedObjectClassName$>* obj = [self.class insertInManagedObjectContext:ctx];
 	<$endif$>
 	[obj updateFromJSON:data inContext:ctx];
 	return obj;
@@ -389,20 +383,21 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
 
 
 	<$foreach Relationship noninheritedRelationships do$>
-	<$if Relationship.destinationEntity.hasJSONImport$><$if Relationship.isToMany$>
+	<$if Relationship.destinationEntity.hasJSONImport$><$if Relationship.isToMany$><$if ! Relationship.notInJSONImport$>
 	{
 		NSArray* objs = [data valueForKeyPath:@"<$Relationship.mappedJSONKeyName$>"];
 	    if (IsNotNull(objs)) {
 	        for (NSDictionary* obj in objs) {
-	        	[self add<$Relationship.name.initialCapitalString$>Object:[_<$Relationship.destinationEntity.managedObjectClassName$> createFromJSON:obj inContext:ctx]];
+	        	[self add<$Relationship.name.initialCapitalString$>Object:[<$Relationship.destinationEntity.managedObjectClassName$> createFromJSON:obj inContext:ctx]];
 	        }
 	    }
 	}
+	<$endif$>
 	<$else$><$if Relationship.hasJSONImport$>
 	{
 		id value = [data valueForKeyPath:@"<$Relationship.mappedJSONKeyName$>"];
 	    if (IsNotNull(value)) {
-	    	self.<$Relationship.name$> = [_<$Relationship.destinationEntity.managedObjectClassName$> createFromJSON:value inContext:ctx];
+	    	self.<$Relationship.name$> = [<$Relationship.destinationEntity.managedObjectClassName$> createFromJSON:value inContext:ctx];
 	    }
 	}
 	<$endif$><$endif$><$endif$>
