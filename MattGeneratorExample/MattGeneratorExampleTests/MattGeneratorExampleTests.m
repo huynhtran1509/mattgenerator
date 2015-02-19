@@ -8,16 +8,20 @@
 
 #import <UIKit/UIKit.h>
 #import <XCTest/XCTest.h>
+#import "AppDelegate.h"
+#import "Event.h"
 
 @interface MattGeneratorExampleTests : XCTestCase
-
+@property (nonatomic) NSManagedObjectContext* context;
 @end
 
 @implementation MattGeneratorExampleTests
 
 - (void)setUp {
     [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
+    
+    AppDelegate* appDelegate = [[UIApplication sharedApplication] delegate];
+    self.context = [appDelegate managedObjectContext];
 }
 
 - (void)tearDown {
@@ -28,6 +32,9 @@
 - (void)testExample {
     // This is an example of a functional test case.
     XCTAssert(YES, @"Pass");
+    
+    
+    Event* evt = [Event createFromJSON:@{} inContext:self.context];
 }
 
 - (void)testPerformanceExample {

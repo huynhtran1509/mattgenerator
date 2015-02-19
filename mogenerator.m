@@ -15,7 +15,9 @@ BOOL       gSwift;
 static NSString *const kAttributeValueScalarTypeKey = @"attributeValueScalarType";
 static NSString *const kAdditionalHeaderFileNameKey = @"additionalHeaderFileName";
 static NSString *const kJSONOptionsKey = @"jsonOptions";
-
+static NSString *const kNotInJSONExportKey = @"notInJSONExport";
+static NSString *const kNotInJSONImportKey = @"notInJSONImport";
+static NSString *const kJSONMappedKeyName = @"mappedKeyName";
 @interface NSAttributeDescription (JSONImportExport)
 -(BOOL)includeInJSONExport;
 -(BOOL)includeInJSONImport;
@@ -390,6 +392,10 @@ static NSString *const kJSONOptionsKey = @"jsonOptions";
     return jsonOptions && [[jsonOptions lowercaseString] rangeOfString:@"export"].location != NSNotFound;
 }
 
+- (BOOL)hasJSONExportOrImport {
+    return [self hasJSONExport] || [self hasJSONImport];
+}
+
 -(NSString*)primaryAttributeToRelateBy {
     return self.userInfo[@"relatedByAttribute"];
 }
@@ -610,11 +616,11 @@ static NSString *const kJSONOptionsKey = @"jsonOptions";
 
 @implementation NSAttributeDescription (JSONImportExport)
 -(BOOL)includeInJSONExport {
-    return self.userInfo[@"notInJSONExport"] == nil;
+    return self.userInfo[kNotInJSONExportKey] == nil;
 
 }
 -(BOOL)includeInJSONImport {
-    return self.userInfo[@"notInJSONImport"] == nil;
+    return self.userInfo[kNotInJSONImportKey] == nil;
 }
 -(NSString*)dateFormat {
     if (self.userInfo[@"dateFormat"]) {
@@ -629,8 +635,8 @@ static NSString *const kJSONOptionsKey = @"jsonOptions";
 }
 
 -(NSString*)mappedJSONKeyName {
-    if (self.userInfo[@"mappedKeyName"]) {
-        return self.userInfo[@"mappedKeyName"] ;
+    if (self.userInfo[kJSONMappedKeyName]) {
+        return self.userInfo[kJSONMappedKeyName] ;
     } else {
         return self.name;
     }
@@ -674,12 +680,21 @@ static NSString *const kJSONOptionsKey = @"jsonOptions";
     return jsonOptions && [[jsonOptions lowercaseString] rangeOfString:@"export"].location != NSNotFound;
 }
 
+-(BOOL)notInJSONExport {
+    return self.userInfo[kNotInJSONExportKey] != nil;
+    
+}
+-(BOOL)notInJSONImport {
+    return self.userInfo[kNotInJSONImportKey] != nil;
+}
+
+
 @end
 
 @implementation NSRelationshipDescription (JSONImportExport)
 -(NSString*)mappedJSONKeyName {
-    if (self.userInfo[@"mappedKeyName"]) {
-        return self.userInfo[@"mappedKeyName"] ;
+    if (self.userInfo[kJSONMappedKeyName]) {
+        return self.userInfo[kJSONMappedKeyName] ;
     } else {
         return self.name;
     }
