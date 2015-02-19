@@ -681,11 +681,11 @@ static NSString *const kJSONMappedKeyName = @"mappedKeyName";
 }
 
 -(BOOL)notInJSONExport {
-    return self.userInfo[kNotInJSONExportKey] == nil;
+    return self.userInfo[kNotInJSONExportKey] != nil;
     
 }
 -(BOOL)notInJSONImport {
-    return self.userInfo[kNotInJSONImportKey] == nil;
+    return self.userInfo[kNotInJSONImportKey] != nil;
 }
 
 
