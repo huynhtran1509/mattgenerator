@@ -16,8 +16,14 @@
 		B001F0071A8D801E0047CECA /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B001F0061A8D801E0047CECA /* Images.xcassets */; };
 		B001F00A1A8D801E0047CECA /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = B001F0081A8D801E0047CECA /* LaunchScreen.xib */; };
 		B001F0161A8D801E0047CECA /* MattGeneratorExampleTests.m in Sources */ = {isa = PBXBuildFile; fileRef = B001F0151A8D801E0047CECA /* MattGeneratorExampleTests.m */; };
-		B001F03D1A8D82FB0047CECA /* DataModel in Resources */ = {isa = PBXBuildFile; fileRef = B001F03B1A8D82FB0047CECA /* DataModel */; };
-		B001F03E1A8D82FB0047CECA /* Generated in Resources */ = {isa = PBXBuildFile; fileRef = B001F03C1A8D82FB0047CECA /* Generated */; };
+		B001F04A1A8D9BA80047CECA /* Event.m in Sources */ = {isa = PBXBuildFile; fileRef = B001F0451A8D9BA80047CECA /* Event.m */; };
+		B001F04B1A8D9BA80047CECA /* Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = B001F0471A8D9BA80047CECA /* Invitation.m */; };
+		B001F04C1A8D9BA80047CECA /* Schedule.m in Sources */ = {isa = PBXBuildFile; fileRef = B001F0491A8D9BA80047CECA /* Schedule.m */; };
+		B001F0531A8D9BB10047CECA /* _Event.m in Sources */ = {isa = PBXBuildFile; fileRef = B001F04E1A8D9BB10047CECA /* _Event.m */; };
+		B001F0541A8D9BB10047CECA /* _Invitation.m in Sources */ = {isa = PBXBuildFile; fileRef = B001F0501A8D9BB10047CECA /* _Invitation.m */; };
+		B001F0551A8D9BB10047CECA /* _Schedule.m in Sources */ = {isa = PBXBuildFile; fileRef = B001F0521A8D9BB10047CECA /* _Schedule.m */; };
+		B0D611D31A96384F001E2321 /* MattGeneratorDependencies.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D611D01A96384F001E2321 /* MattGeneratorDependencies.m */; };
+		B0D611D41A96384F001E2321 /* NSDateFormatter+Optimizations.m in Sources */ = {isa = PBXBuildFile; fileRef = B0D611D21A96384F001E2321 /* NSDateFormatter+Optimizations.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,8 +53,21 @@
 		B001F00F1A8D801E0047CECA /* MattGeneratorExampleTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MattGeneratorExampleTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B001F0141A8D801E0047CECA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B001F0151A8D801E0047CECA /* MattGeneratorExampleTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = MattGeneratorExampleTests.m; sourceTree = "<group>"; };
-		B001F03B1A8D82FB0047CECA /* DataModel */ = {isa = PBXFileReference; lastKnownFileType = folder; path = DataModel; sourceTree = "<group>"; };
-		B001F03C1A8D82FB0047CECA /* Generated */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Generated; sourceTree = "<group>"; };
+		B001F0441A8D9BA80047CECA /* Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Event.h; path = DataModel/Event.h; sourceTree = "<group>"; };
+		B001F0451A8D9BA80047CECA /* Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Event.m; path = DataModel/Event.m; sourceTree = "<group>"; };
+		B001F0461A8D9BA80047CECA /* Invitation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Invitation.h; path = DataModel/Invitation.h; sourceTree = "<group>"; };
+		B001F0471A8D9BA80047CECA /* Invitation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Invitation.m; path = DataModel/Invitation.m; sourceTree = "<group>"; };
+		B001F0481A8D9BA80047CECA /* Schedule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Schedule.h; path = DataModel/Schedule.h; sourceTree = "<group>"; };
+		B001F0491A8D9BA80047CECA /* Schedule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = Schedule.m; path = DataModel/Schedule.m; sourceTree = "<group>"; };
+		B001F04D1A8D9BB10047CECA /* _Event.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _Event.h; path = Generated/_Event.h; sourceTree = "<group>"; };
+		B001F04E1A8D9BB10047CECA /* _Event.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _Event.m; path = Generated/_Event.m; sourceTree = "<group>"; };
+		B001F04F1A8D9BB10047CECA /* _Invitation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _Invitation.h; path = Generated/_Invitation.h; sourceTree = "<group>"; };
+		B001F0501A8D9BB10047CECA /* _Invitation.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _Invitation.m; path = Generated/_Invitation.m; sourceTree = "<group>"; };
+		B001F0511A8D9BB10047CECA /* _Schedule.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = _Schedule.h; path = Generated/_Schedule.h; sourceTree = "<group>"; };
+		B001F0521A8D9BB10047CECA /* _Schedule.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = _Schedule.m; path = Generated/_Schedule.m; sourceTree = "<group>"; };
+		B0D611D01A96384F001E2321 /* MattGeneratorDependencies.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MattGeneratorDependencies.m; path = Dependencies/MattGeneratorDependencies.m; sourceTree = "<group>"; };
+		B0D611D11A96384F001E2321 /* NSDateFormatter+Optimizations.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDateFormatter+Optimizations.h"; path = "Dependencies/NSDateFormatter+Optimizations.h"; sourceTree = "<group>"; };
+		B0D611D21A96384F001E2321 /* NSDateFormatter+Optimizations.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDateFormatter+Optimizations.m"; path = "Dependencies/NSDateFormatter+Optimizations.m"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -90,8 +109,9 @@
 		B001EFF21A8D801E0047CECA /* MattGeneratorExample */ = {
 			isa = PBXGroup;
 			children = (
-				B001F03B1A8D82FB0047CECA /* DataModel */,
-				B001F03C1A8D82FB0047CECA /* Generated */,
+				B08ECF3A1A8E5AD20049D262 /* Dependencies */,
+				B001F0431A8D9B960047CECA /* DataModel */,
+				B001F0421A8D9B880047CECA /* Generated */,
 				B001EFF71A8D801E0047CECA /* AppDelegate.h */,
 				B001EFF81A8D801E0047CECA /* AppDelegate.m */,
 				B001EFFD1A8D801E0047CECA /* MasterViewController.h */,
@@ -131,6 +151,42 @@
 				B001F0141A8D801E0047CECA /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		B001F0421A8D9B880047CECA /* Generated */ = {
+			isa = PBXGroup;
+			children = (
+				B001F04D1A8D9BB10047CECA /* _Event.h */,
+				B001F04E1A8D9BB10047CECA /* _Event.m */,
+				B001F04F1A8D9BB10047CECA /* _Invitation.h */,
+				B001F0501A8D9BB10047CECA /* _Invitation.m */,
+				B001F0511A8D9BB10047CECA /* _Schedule.h */,
+				B001F0521A8D9BB10047CECA /* _Schedule.m */,
+			);
+			name = Generated;
+			sourceTree = "<group>";
+		};
+		B001F0431A8D9B960047CECA /* DataModel */ = {
+			isa = PBXGroup;
+			children = (
+				B001F0441A8D9BA80047CECA /* Event.h */,
+				B001F0451A8D9BA80047CECA /* Event.m */,
+				B001F0461A8D9BA80047CECA /* Invitation.h */,
+				B001F0471A8D9BA80047CECA /* Invitation.m */,
+				B001F0481A8D9BA80047CECA /* Schedule.h */,
+				B001F0491A8D9BA80047CECA /* Schedule.m */,
+			);
+			name = DataModel;
+			sourceTree = "<group>";
+		};
+		B08ECF3A1A8E5AD20049D262 /* Dependencies */ = {
+			isa = PBXGroup;
+			children = (
+				B0D611D01A96384F001E2321 /* MattGeneratorDependencies.m */,
+				B0D611D11A96384F001E2321 /* NSDateFormatter+Optimizations.h */,
+				B0D611D21A96384F001E2321 /* NSDateFormatter+Optimizations.m */,
+			);
+			name = Dependencies;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -214,8 +270,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				B001F03D1A8D82FB0047CECA /* DataModel in Resources */,
-				B001F03E1A8D82FB0047CECA /* Generated in Resources */,
 				B001F0051A8D801E0047CECA /* Main.storyboard in Resources */,
 				B001F00A1A8D801E0047CECA /* LaunchScreen.xib in Resources */,
 				B001F0071A8D801E0047CECA /* Images.xcassets in Resources */,
@@ -252,10 +306,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B001F04B1A8D9BA80047CECA /* Invitation.m in Sources */,
+				B001F04A1A8D9BA80047CECA /* Event.m in Sources */,
+				B0D611D31A96384F001E2321 /* MattGeneratorDependencies.m in Sources */,
+				B001F04C1A8D9BA80047CECA /* Schedule.m in Sources */,
 				B001F0021A8D801E0047CECA /* DetailViewController.m in Sources */,
 				B001EFFF1A8D801E0047CECA /* MasterViewController.m in Sources */,
 				B001EFF91A8D801E0047CECA /* AppDelegate.m in Sources */,
 				B001EFF61A8D801E0047CECA /* main.m in Sources */,
+				B0D611D41A96384F001E2321 /* NSDateFormatter+Optimizations.m in Sources */,
+				B001F0531A8D9BB10047CECA /* _Event.m in Sources */,
+				B001F0541A8D9BB10047CECA /* _Invitation.m in Sources */,
+				B001F0551A8D9BB10047CECA /* _Schedule.m in Sources */,
 				B001EFFC1A8D801E0047CECA /* MattGeneratorExample.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

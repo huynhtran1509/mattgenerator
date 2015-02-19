@@ -17,7 +17,7 @@ static NSString *const kAdditionalHeaderFileNameKey = @"additionalHeaderFileName
 static NSString *const kJSONOptionsKey = @"jsonOptions";
 static NSString *const kNotInJSONExportKey = @"notInJSONExport";
 static NSString *const kNotInJSONImportKey = @"notInJSONImport";
-
+static NSString *const kJSONMappedKeyName = @"mappedKeyName";
 @interface NSAttributeDescription (JSONImportExport)
 -(BOOL)includeInJSONExport;
 -(BOOL)includeInJSONImport;
@@ -635,8 +635,8 @@ static NSString *const kNotInJSONImportKey = @"notInJSONImport";
 }
 
 -(NSString*)mappedJSONKeyName {
-    if (self.userInfo[@"mappedKeyName"]) {
-        return self.userInfo[@"mappedKeyName"] ;
+    if (self.userInfo[kJSONMappedKeyName]) {
+        return self.userInfo[kJSONMappedKeyName] ;
     } else {
         return self.name;
     }
@@ -693,8 +693,8 @@ static NSString *const kNotInJSONImportKey = @"notInJSONImport";
 
 @implementation NSRelationshipDescription (JSONImportExport)
 -(NSString*)mappedJSONKeyName {
-    if (self.userInfo[@"mappedKeyName"]) {
-        return self.userInfo[@"mappedKeyName"] ;
+    if (self.userInfo[kJSONMappedKeyName]) {
+        return self.userInfo[kJSONMappedKeyName] ;
     } else {
         return self.name;
     }

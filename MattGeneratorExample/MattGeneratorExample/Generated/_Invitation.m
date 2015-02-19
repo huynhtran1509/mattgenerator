@@ -7,6 +7,8 @@
 extern NSDate* (^dateFromString)(NSString* dateString, NSString* format);// if you get a link error, you need to implement this block
 extern NSString* (^stringFromDate)(NSDate* date, NSString* format); // if you get a link error, you need to implement this block
 
+#import "Event.h"
+
 static inline BOOL IsNotNull(id object)
 {
     return !((object == nil) || ([object isEqual:[NSNull null]]));
@@ -85,7 +87,7 @@ const struct InvitationUserInfo InvitationUserInfo = {
 
 +(id)createFromJSON:(NSDictionary*)data inContext:(NSManagedObjectContext*)ctx {
 
-	_Invitation* obj = [_Invitation insertInManagedObjectContext:ctx];
+	_Invitation* obj = [self.class insertInManagedObjectContext:ctx];
 
 	[obj updateFromJSON:data inContext:ctx];
 	return obj;

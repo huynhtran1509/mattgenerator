@@ -7,7 +7,7 @@
 extern NSDate* (^dateFromString)(NSString* dateString, NSString* format);// if you get a link error, you need to implement this block
 extern NSString* (^stringFromDate)(NSDate* date, NSString* format); // if you get a link error, you need to implement this block
 
-#import "_Event.h"
+#import "Event.h"
 
 static inline BOOL IsNotNull(id object)
 {
@@ -110,14 +110,6 @@ const struct ScheduleUserInfo ScheduleUserInfo = {
 
 	}
 
-    if (self.events) {
-        NSMutableArray* array = [NSMutableArray array];
-        for (_Event* obj in self.events) {
-            [array addObject:[obj jsonExport]];
-        }
-        result[@"events"] = array;
-    }
-
 }
 
 -(NSDictionary*)jsonExport {
@@ -128,7 +120,7 @@ const struct ScheduleUserInfo ScheduleUserInfo = {
 
 +(id)createFromJSON:(NSDictionary*)data inContext:(NSManagedObjectContext*)ctx {
 
-	_Schedule* obj = [_Schedule insertInManagedObjectContext:ctx];
+	_Schedule* obj = [self.class insertInManagedObjectContext:ctx];
 
 	[obj updateFromJSON:data inContext:ctx];
 	return obj;
@@ -162,21 +154,12 @@ const struct ScheduleUserInfo ScheduleUserInfo = {
 
 			id value = [data valueForKeyPath:@"size"];
 			if (![value isKindOfClass:[NSNumber class]]) {
-				self.size = [NSNumber numberWithDouble:[value doubleValue]];
+				self.size = [NSNumber numberWithInt:[value intValue]];
 			} else {
 				self.size = value;
 			}
 
 		}
-
-	{
-		NSArray* objs = [data valueForKeyPath:@"events"];
-	    if (IsNotNull(objs)) {
-	        for (NSDictionary* obj in objs) {
-	        	[self addEventsObject:[_Event createFromJSON:obj inContext:ctx]];
-	        }
-	    }
-	}
 
 }
 
