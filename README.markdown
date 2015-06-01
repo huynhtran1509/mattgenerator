@@ -6,8 +6,10 @@ Implement json export and import functionality based on userInfo annotations in 
 
 If you are using NSDate fields, mattgenerator expects two external block methods to be provided with the following signatures, or you will see linker errors:
 
-* NSDate* (^dateFromString)(NSString* dateString, NSString* format) = ^NSDate* (NSString* dateString, NSString* format);
-* NSString* (^stringFromDate)(NSDate* date, NSString* format) = ^NSString* (NSDate* date, NSString* format);
+```objc
+NSDate* (^dateFromString)(NSString* dateString, NSString* format) = ^NSDate* (NSString* dateString, NSString* format);
+NSString* (^stringFromDate)(NSDate* date, NSString* format) = ^NSString* (NSDate* date, NSString* format);
+```
 
 Sample implementations are provied here:
 https://github.com/willowtreeapps/mattgenerator/tree/master/MattGeneratorExample/MattGeneratorExample/Dependencies
