@@ -1,6 +1,20 @@
 # mattgenerator, a fork of [mogenerator](https://github.com/rentzsch/mogenerator)
 
-Implement json export and import functionality based on userInfo annotations in your Core Data file. The annotations follow conventions from MagicalRecord+Import. Here is a list of userInfo properties that are used:
+Implement json export and import functionality based on userInfo annotations in your Core Data file. 
+
+#Dependencies
+
+If you are using NSDate fields, mattgenerator expects two external block methods to be provided with the following signatures, or you will see linker errors:
+
+* NSDate* (^dateFromString)(NSString* dateString, NSString* format) = ^NSDate* (NSString* dateString, NSString* format);
+* NSString* (^stringFromDate)(NSDate* date, NSString* format) = ^NSString* (NSDate* date, NSString* format);
+
+Sample implementations are provied here:
+https://github.com/willowtreeapps/mattgenerator/tree/master/MattGeneratorExample/MattGeneratorExample/Dependencies
+
+# Annotations
+
+The annotations follow conventions from MagicalRecord+Import. Here is a list of userInfo properties that are used:
 
 * Entity userInfo
   * *jsonOptions* - comma sepearted list of options
