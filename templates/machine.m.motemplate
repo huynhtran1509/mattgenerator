@@ -343,7 +343,7 @@ const struct <$managedObjectClassName$>UserInfo <$managedObjectClassName$>UserIn
 	<$if Attribute.includeInJSONImport$>
 
 	<$if Attribute.optional$>
-		if (IsNotNull([data valueForKeyPath:@"<$Attribute.mappedJSONKeyName$>"])) {
+if (IsNotNull([data valueForKeyPath:@"<$Attribute.mappedJSONKeyName$>"]) && [[[data valueForKeyPath:@"<$Attribute.mappedJSONKeyName$>"] class] isKindOfClass:[<$Attribute.objectAttributeClassName$> class]]) {
 	<$endif$>
 
 		<$if Attribute.customJSONImport$>
