@@ -14,11 +14,6 @@ build
 .metadata
 bin
 dist
-*.xcodeproj/*.mode*
-*.xcodeproj/*.pbxuser
-**/*.xcodeproj/*
-!**/*.xcodeproj/project.pbxproj
-/mogenerator.xcodeproj/project.xcworkspace/
-/mogenerator.xcodeproj/xcuserdata/
-/contributed templates/Nikita Zhuk/ponso/sample project/PonsoTest/PonsoTest.xcodeproj/project.xcworkspace/xcuserdata/
-/contributed templates/Nikita Zhuk/ponso/sample project/PonsoTest/PonsoTest.xcodeproj/xcuserdata/
+*.xcuserstate
+*.xccheckout
+xcuserdata
