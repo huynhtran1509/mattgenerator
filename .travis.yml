@@ -1,3 +1,6 @@
 language: objective-c
 xcode_workspace: mattgenerator.xcworkspace # path to your xcodeproj folder
-xcode_scheme: mogenerator
+xcode_scheme: mogeneratorosx_image: xcode7.1
+#xcode_project: mogenerator.xcodeproj
+#xcode_scheme: mogenerator
+script: cd test && rake
